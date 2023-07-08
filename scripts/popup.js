@@ -30,11 +30,14 @@ const activateEyeDropper = async () => {
         const rgb = hexToRGB(hex);
 
 
-        console.log(hex);
-        console.log(rgb);
+        
 
         color1.style.backgroundColor = rgb;
         colorContainer.style.visibility = "visible";
+
+
+
+        
         
     } catch (error) {
         console.log(error);

@@ -1,11 +1,12 @@
 .container {
-    width: 300px;
     display: flex;
     flex-direction: column;
+    border-radius: 5px;
+    width: 50%;
 }
 
 .color-btn {
-    width: 33%;
+    width: 50%;
 }
 
 .color-1 {
@@ -17,4 +18,17 @@
 
 .color-container {
     visibility: hidden;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.title-2 {
+    margin: 0;
+}
+
+.container-main {
+    display: flex;
+    flex-direction: row;
+    width: 300px;
 }
