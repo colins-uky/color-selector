@@ -6,16 +6,60 @@
             <script src="scripts/popup.js" defer></script>
         </head>
         <body>
-            <div class="container-main">
-                <div class="container">
-                    <h1 class="title"> Color Selector </h1>
-                    <button class="color-btn" id="pick-color">Pick Color</button>
+            <div class="popup">
+                <div class="container-main">
+                    <div class="container">
+                        <div class="container-row">
+                            <img class="logo" src="images/color_selector-32.png">
+                            <h1 class="title"> Color Selector </h1>
+                        </div>
 
-                    
+                        
+                        <button class="color-btn" id="pick-color"><img src="images/drop.svg" class="drop-icon">Eye Dropper</button>
+
+                        
+
+                        
+
+                        <div class="history">
+                            <div class="history-row">
+                                <h3> History: </h3>
+                                <img src="images/delete-bin.svg" class="trash-icon" id="clear-history">
+                            </div>
+                            <div id="history-container"></div>
+                        </div>
+                        
+                    </div>
+                    <div class="color-container">
+                        <div class="palette-container margin-bot">
+                            <div class="sideways-text"><p class="label">Selected</p></div>
+
+                            <div class="color" id="selected-color">
+                                <p id="selected-hex" class="copy"></p>
+                                
+                                <div class="color-codes-bottom">
+                                    <p id="selected-rgb" class="copy"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="palette-container margin-top">
+                            <div class="sideways-text"><p class="label">History</p></div>
+                            
+                            <div class='color' id="history-color">
+                                <p id="history-hex" class="copy"></p>
+                                
+                                <div class="color-codes-bottom">
+                                    <p id="history-rgb" class="copy"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="color-container">
-                    <h2 class="title-2"> Selected Color: </h2>
-                    <div class="color-1"></div>
+
+                <div class="settings-container">
+                    <img class="settings-icon" src="images/settings.svg">
+                    <img class="about-icon" src="images/question.svg">
                 </div>
             </div>
         </body>
