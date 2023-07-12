@@ -1,4 +1,4 @@
-const popupContainer = document.querySelector('.popup');
+const popupContainer = document.querySelector('.extension-container');
 const colorPickerButton = document.querySelector("#pick-color");
 const selectedColor = document.querySelector("#selected-color");
 const selectedHex = document.querySelector('#selected-hex');
@@ -192,4 +192,26 @@ colorPickerButton.addEventListener("click", () => {
     // css class styles to be applied and rendered. i.e. next frame
     // ~17 ms for 60 fps and ~7 ms for 144 fps
     setTimeout(activateEyeDropper, 17);
+});
+
+// Add event listeners for navigation icons
+// Settings page
+document.querySelector('.settings-icon').addEventListener('click', () => {
+    document.querySelector('.popup').style.display = 'none';
+    document.querySelector('.popup-about').style.display = 'none';
+    document.querySelector('.popup-settings').style.display = 'flex';
+});
+
+// About page
+document.querySelector('.about-icon').addEventListener('click', () => {
+    document.querySelector('.popup').style.display = 'none';
+    document.querySelector('.popup-settings').style.display = 'none';
+    document.querySelector('.popup-about').style.display = 'flex';
+});
+
+// Home page
+document.querySelector('.home-icon').addEventListener('click', () => {
+    document.querySelector('.popup-settings').style.display = 'none';
+    document.querySelector('.popup-about').style.display = 'none';
+    document.querySelector('.popup').style.display = 'flex';
 });

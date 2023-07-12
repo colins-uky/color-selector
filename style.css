@@ -171,14 +171,19 @@
     height: 24px;
     align-self: flex-end;
     cursor: pointer;
+    
 }
 
-.about-icon {
+.about-icon, .home-icon {
     width: 24px;
     height: 24px;
     align-self: flex-end;
     margin-right: 10px;
     cursor: pointer;
+}
+
+.about-icon:hover, .home-icon:hover, .settings-icon:hover {
+    filter: invert(38%) sepia(80%) saturate(2142%) hue-rotate(198deg) brightness(90%) contrast(98%);
 }
 
 .settings-container {
@@ -187,6 +192,19 @@
     flex-direction: row-reverse;
 }
 
+.popup-settings {
+    display: none;
+    flex-direction: column;
+    width: 400px;
+    height: 190px;
+}
+
+.popup-about {
+    display: none;
+    flex-direction: column;
+    width: 400px;
+    height: 190px;
+}
 
 @keyframes backgroundColorChange {
     0% {
