@@ -1,8 +1,11 @@
 const popupContainer = document.querySelector('.extension-container');
-const colorPickerButton = document.querySelector("#pick-color");
-const selectedColor = document.querySelector("#selected-color");
-const selectedHex = document.querySelector('#selected-hex');
-const selectedRGB = document.querySelector('#selected-rgb');
+
+let localSettings = {
+    darkMode: null,
+    copyHex: null
+}
+
+//////////////////// COLOR SELECTOR MEMBER FUNCTIONS ////////////////////
 
 function hexToRGB (hex) {
     let r = 0, g = 0, b = 0;
@@ -53,6 +56,9 @@ function addToHistoryDisplay(color) {
 
     // Add onclick event
     colorCell.addEventListener('click', () => {
+        if (localSettings.copyHex) {
+            navigator.clipboard.writeText(color.hex);
+        }
         document.querySelector('#history-color').style.backgroundColor = color.rgb;
         document.querySelector('#history-hex').innerText = color.hex;
         document.querySelector('#history-rgb').innerText = color.rgb;
@@ -72,14 +78,48 @@ function displayColorHistory(colorHistory) {
     colorHistory.forEach(color => addToHistoryDisplay(color)); // add each color to the grid
 }
 
-// Initialize color history storage
-chrome.storage.local.get('colorHistory', ({ colorHistory }) => {
-    if (!colorHistory) {
-        chrome.storage.local.set({ colorHistory: [] });
-    } else {
-        displayColorHistory(colorHistory);
+function updateSettingsDisplay(settings) {
+    for (let [key, value] of Object.entries(settings)) {
+        document.getElementById(key).checked = value;
     }
-});
+
+    handleDarkMode(settings.darkMode);
+
+    
+}
+
+function handleDarkMode(darkMode) {
+    const icons = document.getElementsByClassName('icon');
+    const colorCells = document.getElementsByClassName('color-cell');
+    const links = document.getElementsByTagName('a');
+
+    if (darkMode) {
+        for (let i = 0; i < icons.length; i++) {
+            icons[i].classList.add('dark-mode-icons');
+        }
+        document.body.classList.add('dark-mode');
+        for (let i = 0; i < colorCells.length; i++) {
+            colorCells[i].classList.add('dark-mode-history-cell');
+        }
+        for (let i = 0; i < links.length; i++) {
+            links[i].classList.add('dark-mode-link');
+        }
+    }
+    else {
+        for (let i = 0; i < icons.length; i++) {
+            icons[i].classList.remove('dark-mode-icons');
+        }
+        document.body.classList.remove('dark-mode');
+        for (let i = 0; i < colorCells.length; i++) {
+            colorCells[i].classList.remove('dark-mode-history-cell');
+        }
+        for (let i = 0; i < links.length; i++) {
+            links[i].classList.remove('dark-mode-link');
+        }
+    }
+}
+
+
 
 async function activateEyeDropper () {
     try {
@@ -91,6 +131,10 @@ async function activateEyeDropper () {
 
         const hex = response.sRGBHex;
         const rgb = hexToRGB(hex);
+
+        if (localSettings.copyHex) {
+            navigator.clipboard.writeText(hex);
+        }  
 
         chrome.storage.local.get('colorHistory', ({ colorHistory }) => {
             if (!colorHistory) {
@@ -114,11 +158,14 @@ async function activateEyeDropper () {
                 updateHistoryDisplay(colorHistory);
             })
         })
-        
-        selectedColor.style.backgroundColor = rgb;
 
-        selectedRGB.innerText = rgb;
-        selectedHex.innerText = hex;
+        
+
+        
+        document.querySelector("#selected-color").style.backgroundColor = rgb;
+
+        document.querySelector('#selected-rgb').innerText = rgb;
+        document.querySelector('#selected-hex').innerText = hex;
         
     } catch (error) {
         console.log(error);
@@ -138,6 +185,85 @@ function copyToClipboard(element) {
 
 
 
+
+//////////////////// CHROME LOCAL STORAGE ////////////////////
+// Initialize chrome local storage vars
+// Initialize color history storage
+chrome.storage.local.get('colorHistory', ({ colorHistory }) => {
+    if (!colorHistory) {
+        chrome.storage.local.set({ colorHistory: [] });
+    } else {
+        displayColorHistory(colorHistory);
+
+
+        let latestColor;
+
+        // Check if the color history is not empty
+        if (colorHistory && colorHistory.length > 0) {
+            // Get the latest color
+            latestColor = colorHistory[colorHistory.length - 1];
+        } else {
+            // Use white as the default color
+            latestColor = {
+                hex: '#ffffff',
+                rgb: 'rgb(255,255,255)'
+            };
+        }
+
+        // Get the selected and history color divs
+        document.querySelector('#history-color').style.backgroundColor = latestColor.rgb;
+        document.querySelector('#history-hex').innerText = latestColor.hex;
+        document.querySelector('#history-rgb').innerText = latestColor.rgb;
+
+        document.querySelector('#selected-color').style.backgroundColor = latestColor.rgb;
+        document.querySelector('#selected-hex').innerText = latestColor.hex;
+        document.querySelector('#selected-rgb').innerText = latestColor.rgb;
+
+    }
+});
+
+// Initialize settings storage
+chrome.storage.local.get('settings', ({ settings }) => {
+    if (!settings) {
+        chrome.storage.local.set({ settings: JSON.stringify({
+            darkMode: false,
+            copyHex: false
+        })});
+    }
+    else {
+        localSettings = JSON.parse(settings);
+        updateSettingsDisplay(localSettings);
+    }
+})
+
+
+
+
+//////////////////// EVENT LISTENERS ////////////////////
+// Add event listeners for navigation icons
+// Settings page
+document.querySelector('#settings-icon').addEventListener('click', () => {
+    document.querySelector('.popup').style.display = 'none';
+    document.querySelector('.popup-about').style.display = 'none';
+    document.querySelector('.popup-settings').style.display = 'flex';
+});
+
+// About page
+document.querySelector('#about-icon').addEventListener('click', () => {
+    document.querySelector('.popup').style.display = 'none';
+    document.querySelector('.popup-settings').style.display = 'none';
+    document.querySelector('.popup-about').style.display = 'flex';
+});
+
+// Home page
+document.querySelector('#home-icon').addEventListener('click', () => {
+    document.querySelector('.popup-settings').style.display = 'none';
+    document.querySelector('.popup-about').style.display = 'none';
+    document.querySelector('.popup').style.display = 'flex';
+});
+
+
+// Copyable div listeners
 const copyDivs = document.getElementsByClassName('copy');
 for (let i = 0; i < copyDivs.length; i++) {
     copyDivs[i].addEventListener("click", () => {
@@ -145,46 +271,34 @@ for (let i = 0; i < copyDivs.length; i++) {
     })
 }
 
+// Event listener for settings form
+document.querySelector('#settings-form').addEventListener('submit', (e) => {
+    e.preventDefault();
 
-const clearHistoryButton = document.querySelector('#clear-history');
-clearHistoryButton.addEventListener('click', () => {
-    // Clear the color history in storage
-    chrome.storage.local.set({ colorHistory: [] }, () => {
-        console.log("Color history cleared");
+    const submitButton = document.getElementById('settings-submit-btn');
 
-        // Clear the history display
-        const historyContainer = document.querySelector("#history-container");
-        historyContainer.innerHTML = '';
-    });
-});
+    submitButton.value = 'Saved!';
 
-chrome.storage.local.get('colorHistory', ({ colorHistory }) => {
-    let latestColor;
 
-    // Check if the color history is not empty
-    if (colorHistory && colorHistory.length > 0) {
-        // Get the latest color
-        latestColor = colorHistory[colorHistory.length - 1];
-    } else {
-        // Use white as the default color
-        latestColor = {
-            hex: '#ffffff',
-            rgb: 'rgb(255,255,255)'
-        };
-    }
+    localSettings = {
+        darkMode: document.getElementById('darkMode').checked,
+        copyHex: document.getElementById('copyHex').checked
+    };
 
-    // Get the selected and history color divs
-    document.querySelector('#history-color').style.backgroundColor = latestColor.rgb;
-    document.querySelector('#history-hex').innerText = latestColor.hex;
-    document.querySelector('#history-rgb').innerText = latestColor.rgb;
+    
 
-    document.querySelector('#selected-color').style.backgroundColor = latestColor.rgb;
-    document.querySelector('#selected-hex').innerText = latestColor.hex;
-    document.querySelector('#selected-rgb').innerText = latestColor.rgb;
+    chrome.storage.local.set({ settings: JSON.stringify(localSettings)});
+
+    updateSettingsDisplay(localSettings);
+
+    setTimeout(() => {
+        submitButton.value = 'Save';
+    }, 1000);
 
 });
 
-colorPickerButton.addEventListener("click", () => {
+// Eye Dropper event listener
+document.querySelector("#pick-color").addEventListener("click", () => {
     // Hide popup window
     popupContainer.classList.add('hide-popup');
 
@@ -194,24 +308,14 @@ colorPickerButton.addEventListener("click", () => {
     setTimeout(activateEyeDropper, 17);
 });
 
-// Add event listeners for navigation icons
-// Settings page
-document.querySelector('.settings-icon').addEventListener('click', () => {
-    document.querySelector('.popup').style.display = 'none';
-    document.querySelector('.popup-about').style.display = 'none';
-    document.querySelector('.popup-settings').style.display = 'flex';
-});
+// Clear history event listener
+document.querySelector('#clear-history').addEventListener('click', () => {
+    // Clear the color history in storage
+    chrome.storage.local.set({ colorHistory: [] }, () => {
+        console.log("Color history cleared");
 
-// About page
-document.querySelector('.about-icon').addEventListener('click', () => {
-    document.querySelector('.popup').style.display = 'none';
-    document.querySelector('.popup-settings').style.display = 'none';
-    document.querySelector('.popup-about').style.display = 'flex';
-});
-
-// Home page
-document.querySelector('.home-icon').addEventListener('click', () => {
-    document.querySelector('.popup-settings').style.display = 'none';
-    document.querySelector('.popup-about').style.display = 'none';
-    document.querySelector('.popup').style.display = 'flex';
+        // Clear the history display
+        const historyContainer = document.querySelector("#history-container");
+        historyContainer.innerHTML = '';
+    });
 });

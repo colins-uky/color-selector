@@ -23,6 +23,40 @@
     flex-direction: row;
 }
 
+.container-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.no-bottom-margin {
+    margin-bottom: 1px;
+}
+
+.font-lg {
+    font-size: large;
+}
+
+.font-md {
+    font-size: medium;
+}
+
+.font-sm {
+    font-size: small;
+}
+
+.margin-bottom {
+    margin-bottom: 0.5rem;
+}
+
+.items-center {
+    display: flex;
+    align-items: center;
+}
+
 
 .color-btn {
     width: 66%;
@@ -35,6 +69,7 @@
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 1px 1px 3px grey;
+    border: 2px solid black;
     background-color: lightgrey;
 }
 
@@ -125,6 +160,7 @@
     margin: 2px 2px 2px 6px;
     font-size: small;
     background-color: white;
+    color: black;
     border-radius: 5px;
     padding: 2px 6px 2px 6px;
     cursor: pointer;
@@ -146,7 +182,7 @@
     border: 1px solid black;
 }
 
-.trash-icon {
+#clear-history {
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -166,7 +202,7 @@
     align-items: center;
 }
 
-.settings-icon {
+#settings-icon {
     width: 24px;
     height: 24px;
     align-self: flex-end;
@@ -174,7 +210,7 @@
     
 }
 
-.about-icon, .home-icon {
+#about-icon, #home-icon {
     width: 24px;
     height: 24px;
     align-self: flex-end;
@@ -182,7 +218,7 @@
     cursor: pointer;
 }
 
-.about-icon:hover, .home-icon:hover, .settings-icon:hover {
+#about-icon:hover, #home-icon:hover, #settings-icon:hover {
     filter: invert(38%) sepia(80%) saturate(2142%) hue-rotate(198deg) brightness(90%) contrast(98%);
 }
 
@@ -199,11 +235,70 @@
     height: 190px;
 }
 
+#settings-form {
+    margin-top: 10px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 170px;
+}
+
+#settings-form label input {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+}
+
+#settings-form label {
+    margin-bottom: 5px;
+}
+
+#settings-submit-btn {
+    width: 64px;
+    height: 28px;
+    background-color: #5cb85c;
+    border: 2px solid #4cae4c;
+    cursor: pointer;
+    color: white;
+    border-radius: 6px;
+}
+
+#settings-submit-btn:hover {
+    background-color: #449d44;
+    border-color: #398439;
+}
+
 .popup-about {
     display: none;
     flex-direction: column;
     width: 400px;
     height: 190px;
+}
+
+.dark-mode {
+    background-color: #313131;
+    color: white;
+}
+
+.dark-mode-icons {
+    filter: invert(1);
+}
+
+.dark-mode-history-cell {
+    border-color: lightgrey !important;
+}
+
+.dark-mode-link:link {
+    color: #7ed8f6;
+}
+
+.dark-mode-link:visited {
+    color: #6aa9ff;
+}
+
+.dark-mode-link:hover {
+    color: #4895ff;
 }
 
 @keyframes backgroundColorChange {

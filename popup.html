@@ -25,7 +25,7 @@
                         <div class="history">
                             <div class="history-row">
                                 <h3> History: </h3>
-                                <img src="images/delete-bin.svg" class="trash-icon" id="clear-history">
+                                <img src="images/delete-bin.svg" class="icon" id="clear-history">
                             </div>
                             <div id="history-container"></div>
                         </div>
@@ -62,27 +62,60 @@
             </div>
 
             <div class="popup-settings">
-                <div class="container-main">
-                    <div class="container-row">
-                        <img class="logo" src="images/color_selector-32.png">
-                        <h1 class="title"> Settings </h1>
+                <div class="container-column">
+                    <div class="container-main">
+                        <div class="container-row">
+                            <img class="logo" src="images/color_selector-32.png">
+                            <h1 class="title"> Settings </h1>
+                        </div>
                     </div>
+
+                    <form id="settings-form">
+                        <div>
+                            <label for="darkMode" class="items-center">
+                                <input type="checkbox" id="darkMode" name="darkMode">
+                                Dark Mode
+                            </label>
+
+                            <label for="copyHex" class="items-center">
+                                <input type="checkbox" id="copyHex" name="copyHex">
+                                Automatically copy selected color to clipboard
+                            </label><br>
+                        </div>
+
+                        <input type="submit" value="Save" id="settings-submit-btn">
+                    </form>
                 </div>
             </div>
 
             <div class="popup-about">
-                <div class="container-main">
-                    <div class="container-row">
-                        <img class="logo" src="images/color_selector-32.png">
-                        <h1 class="title"> About </h1>
+                <div class="container-column">
+                    <div class="container-main">
+                        <div class="container-row">
+                            <img class="logo" src="images/color_selector-32.png">
+                            <h1 class="title"> About </h1>
+                        </div>
+                    </div>
+
+                    <div class="container-column center margin-bottom">
+                        <h2 class="no-margin"> Author: </h2>
+                        <p class="no-margin font-md"> Colin Schuh </p>
+                        <p class="no-margin font-sm"> CS & Mathematics Student at UK </p>
+                        <a class="font-sm" href="https://www.linkedin.com/in/colinschuh" target="_blank">LinkedIn</a>
+                    </div>
+
+                    <div class="container-column center">
+                        <h2 class="no-margin"> Credits: </h2>
+                        <p class="no-margin font-md"> Logo </p>
+                        <a class="font-sm" href="https://www.flaticon.com/free-icons/color-wheel" target="_blank" title="color wheel icons">Color wheel icons created by Freepik - Flaticon</a>
                     </div>
                 </div>
             </div>
 
             <div class="settings-container">
-                <img class="settings-icon" src="images/settings.svg">
-                <img class="about-icon" src="images/question.svg">
-                <img class="home-icon" src="images/home.svg">
+                <img id="settings-icon" class="icon" src="images/settings.svg">
+                <img id="about-icon" class="icon" src="images/question.svg">
+                <img id="home-icon" class="icon" src="images/home.svg">
             </div>
             </div>
         </body>
